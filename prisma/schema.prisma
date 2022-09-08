@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Permission {
+  id              Int               @id @default(autoincrement())
+  name            String
+  active          Boolean
+  RolePermissions RolePermissions[]
+}
+
+model Role {
+  id              Int               @id @default(autoincrement())
+  name            String
+  RolePermissions RolePermissions[]
+  User            User[]
+}
+
+model RolePermissions {
+  Role         Role       @relation(fields: [roleId], references: [id])
+  roleId       Int
+  Permission   Permission @relation(fields: [permissionId], references: [id])
+  permissionId Int
+
+  @@id([roleId, permissionId])
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  name     String?
+  password String
+  Role     Role    @relation(fields: [roleID], references: [id])
+  roleID   Int
+}
+
+model TopicType {
+  id    Int     @id @default(autoincrement())
+  name  String
+  Topic Topic[]
+}
+
+model Topic {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  Course      Course    @relation(fields: [courseID], references: [id])
+  courseID    Int
+  TopicType   TopicType @relation(fields: [topicTypeId], references: [id])
+  topicTypeId Int
+}
+
+model Category {
+  id     Int      @id @default(autoincrement())
+  name   String
+  Course Course[]
+}
+
+model Course {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String
+  videoURL    String
+  Topic       Topic[]
+  Category    Category[]
+}
