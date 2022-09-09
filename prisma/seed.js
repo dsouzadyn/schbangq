@@ -1,5 +1,5 @@
 const { PrismaClient } = require('@prisma/client')
-const { permissions, rolepermissions, roles } = require('./data.js')
+const { permissions, rolepermissions, roles, statuses } = require('./data.js')
 const prisma = new PrismaClient()
 
 
@@ -13,6 +13,9 @@ const load = async() => {
         
         await prisma.role.deleteMany();
         console.log('Deleted records in the roles table');
+
+        await prisma.status.deleteMany();
+        console.log('Deleted records in the statuses table');
 
         await prisma.$queryRaw`UPDATE sqlite_sequence SET  seq = 1 WHERE name= 'Permission'`;
         console.log('Reset permission auto increment to 1');
@@ -38,8 +41,14 @@ const load = async() => {
                 data: rolepermissions[i]
             });
         };
-        
         console.log('mapped roles to permissions');
+
+        for(var i = 0; i < statuses.length; i++) {
+            await prisma.status.create({
+                data: statuses[i]
+            });
+        }
+        console.log('added status data');
     } catch (e) {
         console.error(e);
         process.exit(1);

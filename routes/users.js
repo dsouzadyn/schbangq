@@ -23,7 +23,7 @@ router.post('/signup', body('email').isEmail(), body('password').isLength({ min:
   try {
     const employeeRole = await prisma.role.findFirst({
       where: {
-        name: "EMPLOYEE"
+        name: req.body.role || "EMPLOYEE"
       }
     });
     const user = await prisma.user.create({

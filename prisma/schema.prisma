@@ -38,17 +38,18 @@ model RolePermissions {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
   name     String?
   password String
-  Role     Role    @relation(fields: [roleID], references: [id])
+  Role     Role     @relation(fields: [roleID], references: [id])
   roleID   Int
+  Course   Course[]
 }
 
 model TopicType {
   id    Int     @id @default(autoincrement())
-  name  String
+  name  String  @unique
   Topic Topic[]
 }
 
@@ -64,6 +65,12 @@ model Topic {
 
 model Category {
   id     Int      @id @default(autoincrement())
+  name   String   @unique
+  Course Course[]
+}
+
+model Status {
+  id     Int      @id @default(autoincrement())
   name   String
   Course Course[]
 }
@@ -75,4 +82,8 @@ model Course {
   videoURL    String
   Topic       Topic[]
   Category    Category[]
+  Status      Status     @relation(fields: [statusID], references: [id])
+  statusID    Int
+  CreatedBy   User       @relation(fields: [userId], references: [id])
+  userId      Int
 }

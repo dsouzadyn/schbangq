@@ -52,5 +52,18 @@ module.exports = {
     },{
         roleId: 3,
         permissionId: 6,
-    }]
+    }],
+    statuses: [{
+        id: 1,
+        name: "APPROVED"
+    }, {
+        id: 2,
+        name: "REJECTED"
+    }, {
+        id: 3,
+        name: "DRAFT"
+    }, {
+        id: 4,
+        name: "AWAITING_APPROVAL"
+    }],
 }
